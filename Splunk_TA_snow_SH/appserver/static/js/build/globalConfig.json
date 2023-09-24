@@ -1,0 +1,866 @@
+{
+    "pages": {
+        "configuration": {
+            "description": "Configure your ServiceNow credentials, proxy and data collection information",
+            "tabs": [
+                {
+                    "table": {
+                        "actions": [
+                            "edit",
+                            "delete",
+                            "clone"
+                        ],
+                        "header": [
+                            {
+                                "field": "name",
+                                "label": "Account Name"
+                            },
+                            {
+                                "label": "Authentication Type",
+                                "field": "auth_type",
+                                "customCell": {
+                                    "src": "custom_account_cell.4.0.0",
+                                    "type": "external"
+                                }
+                            }
+                        ]
+                    },
+                    "entity": [
+                        {
+                            "field": "name",
+                            "label": "Account Name",
+                            "type": "text",
+                            "help": "Enter a unique name for this account.",
+                            "required": true,
+                            "options": {
+                                "placeholder": "Required"
+                            },
+                            "validators": [
+                                {
+                                    "type": "string",
+                                    "maxLength": 50,
+                                    "minLength": 1,
+                                    "errorMsg": "Account Name must not exceed 50 characters."
+                                },
+                                {
+                                    "type": "regex",
+                                    "errorMsg": "Account Name must begin with a letter and consist exclusively of alphanumeric characters and underscores.",
+                                    "pattern": "^[a-zA-Z]\\w*$"
+                                }
+                            ]
+                        },
+                        {
+                            "field": "url",
+                            "label": "URL",
+                            "type": "text",
+                            "help": "Enter the URL, for example, https://myaccount.service-now.com.",
+                            "required": true,
+                            "options": {
+                                "placeholder": "Required"
+                            },
+                            "validators": [
+                                {
+                                    "errorMsg": "Invalid URL provided. URL should start with 'https' as only secure URLs are supported. Provide URL in this format: https://myaccount.service-now.com",
+                                    "type": "regex",
+                                    "pattern": "^(https://)[^/]+/?$"
+                                }
+                            ]
+                        },
+                        {
+                            "type": "text",
+                            "label": "Endpoint URL",
+                            "help": "Enter the endpoint URL.",
+                            "field": "endpoint",
+                            "options": {
+                                "display": false
+                            }
+                        },
+                        {
+                            "type": "oauth",
+                            "field": "oauth",
+                            "label": "Not used",
+                            "options": {
+                                "auth_type": [
+                                    "basic",
+                                    "oauth"
+                                ],
+                                "basic": [
+                                    {
+                                        "oauth_field": "username",
+                                        "label": "Username",
+                                        "help": "Enter the username for this account.",
+                                        "field": "username",
+                                        "options": {
+                                            "placeholder": "Required"
+                                        }
+                                    },
+                                    {
+                                        "oauth_field": "password",
+                                        "label": "Password",
+                                        "encrypted": true,
+                                        "help": "Enter the password for this account.",
+                                        "field": "password",
+                                        "options": {
+                                            "placeholder": "Required"
+                                        }
+                                    }
+                                ],
+                                "oauth": [
+                                    {
+                                        "oauth_field": "client_id",
+                                        "label": "Client Id",
+                                        "field": "client_id",
+                                        "help": "Enter the Servicenow Client Id for this account.",
+                                        "options": {
+                                            "placeholder": "Required"
+                                        }
+                                    },
+                                    {
+                                        "oauth_field": "client_secret",
+                                        "label": "Client Secret",
+                                        "field": "client_secret",
+                                        "encrypted": true,
+                                        "help": "Enter the Servicenow Client Secret key for this account.",
+                                        "options": {
+                                            "placeholder": "Required"
+                                        }
+                                    },
+                                    {
+                                        "oauth_field": "redirect_url",
+                                        "label": "Redirect url",
+                                        "field": "redirect_url",
+                                        "help": "Copy and paste this URL into your Servicenow registry redirect url."
+                                    }
+                                ],
+                                "auth_code_endpoint": "/oauth_auth.do",
+                                "access_token_endpoint": "/oauth_token.do",
+                                "oauth_timeout": 30,
+                                "oauth_state_enabled": true
+                            }
+                        },
+                        {
+                            "field": "record_count",
+                            "label": "Record Count",
+                            "type": "text",
+                            "help": "Enter the maximum number of records to be fetched at each API call to the database tables. Range is 1-10000. Default is 3000. Lesser record count value may result in slower data collection rate.",
+                            "defaultValue": 3000,
+                            "options": {
+                                "display": true
+                            },
+                            "validators": [
+                                {
+                                    "type": "number",
+                                    "range": [
+                                        1,
+                                        10000
+                                    ]
+                                },
+                                {
+                                    "type": "regex",
+                                    "errorMsg": "Record Count field must be an integer.",
+                                    "pattern": "^\\d+$"
+                                }
+                            ]
+                        },
+                        {
+                            "type": "checkbox",
+                            "field": "disable_ssl_certificate_validation",
+                            "defaultValue": 0,
+                            "label": "Disable SSL validation",
+                            "options": {
+                                "display": false
+                            }
+                        }
+                    ],
+                    "title": "ServiceNow Account",
+                    "name": "account",
+                    "hook": {
+                        "src": "account_hook.4.0.0",
+                        "type": "external"
+                    }
+                },
+                {
+                    "entity": [
+                        {
+                            "field": "proxy_enabled",
+                            "label": "Enable Proxy",
+                            "type": "checkbox"
+                        },
+                        {
+                            "field": "proxy_url",
+                            "label": "Proxy Host",
+                            "type": "text",
+                            "required": true,
+                            "options": {
+                                "placeholder": "Required"
+                            },
+                            "validators": [
+                                {
+                                    "type": "string",
+                                    "maxLength": 4096,
+                                    "minLength": 0,
+                                    "errorMsg": "Maximum length allowed for host is 4096"
+                                },
+                                {
+                                    "pattern": "^[a-zA-Z0-9:][a-zA-Z0-9\\.\\-:]+$",
+                                    "errorMsg": "Proxy Host is invalid",
+                                    "type": "regex"
+                                }
+                            ]
+                        },
+                        {
+                            "field": "proxy_port",
+                            "label": "Proxy Port",
+                            "type": "text",
+                            "required": true,
+                            "options": {
+                                "placeholder": "Required"
+                            },
+                            "validators": [
+                                {
+                                    "type": "number",
+                                    "range": [
+                                        1,
+                                        65535
+                                    ]
+                                },
+                                {
+                                    "type": "regex",
+                                    "errorMsg": "Proxy Port field must be an integer.",
+                                    "pattern": "^\\d+$"
+                                }
+                            ]
+                        },
+                        {
+                            "field": "proxy_username",
+                            "label": "Proxy Username",
+                            "type": "text",
+                            "validators": [
+                                {
+                                    "type": "string",
+                                    "maxLength": 50,
+                                    "minLength": 1,
+                                    "errorMsg": "Maximum length allowed for username is 50"
+                                }
+                            ]
+                        },
+                        {
+                            "field": "proxy_password",
+                            "label": "Proxy Password",
+                            "type": "text",
+                            "encrypted": true
+                        },
+                        {
+                            "type": "checkbox",
+                            "field": "proxy_rdns",
+                            "label": "Use Proxy for DNS Resolution"
+                        },
+                        {
+                            "type": "singleSelect",
+                            "options": {
+                                "disableSearch": true,
+                                "autoCompleteFields": [
+                                    {
+                                        "value": "http",
+                                        "label": "http"
+                                    },
+                                    {
+                                        "value": "socks5",
+                                        "label": "socks5"
+                                    }
+                                ]
+                            },
+                            "defaultValue": "http",
+                            "field": "proxy_type",
+                            "label": "Proxy Type",
+                            "required": true
+                        }
+                    ],
+                    "title": "ServiceNow Proxy Setup",
+                    "name": "proxy"
+                },
+                {
+                    "entity": [
+                        {
+                            "field": "loglevel",
+                            "label": "Logging level",
+                            "help": "(DEBUG, INFO, WARN, ERROR or CRITICAL)",
+                            "defaultValue": "INFO",
+                            "type": "singleSelect",
+                            "required": true,
+                            "options": {
+                                "disableSearch": true,
+                                "autoCompleteFields": [
+                                    {
+                                        "label": "DEBUG",
+                                        "value": "DEBUG"
+                                    },
+                                    {
+                                        "label": "INFO",
+                                        "value": "INFO"
+                                    },
+                                    {
+                                        "label": "WARN",
+                                        "value": "WARN"
+                                    },
+                                    {
+                                        "label": "ERROR",
+                                        "value": "ERROR"
+                                    },
+                                    {
+                                        "label": "CRITICAL",
+                                        "value": "CRITICAL"
+                                    }
+                                ]
+                            }
+                        }
+                    ],
+                    "title": "Logging",
+                    "name": "logging"
+                },
+                {
+                    "entity": [
+                        {
+                            "field": "selected_api",
+                            "label": "API Selection",
+                            "help": "Use Import Set API or Table API while creating incidents in ServiceNow",
+                            "defaultValue": "table_api",
+                            "type": "singleSelect",
+                            "required": true,
+                            "options": {
+                                "disableSearch": true,
+                                "autoCompleteFields": [
+                                    {
+                                        "label": "Table API",
+                                        "value": "table_api"
+                                    },
+                                    {
+                                        "label": "Import Set API",
+                                        "value": "import_set_api"
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "field": "reference_link",
+                            "label": "",
+                            "type": "helpLink",
+                            "options": {
+                                "text": "Click here for more details",
+                                "link": "https://docs.splunk.com/Documentation/AddOns/released/ServiceNow/Setuptheadd-on"
+                            }
+                        }
+                    ],
+                    "title": "API Selection",
+                    "name": "api_selection"
+                }
+            ],
+            "title": "Configuration"
+        },
+        "inputs": {
+            "description": "Enable ServiceNow database table inputs",
+            "table": {
+                "actions": [
+                    "edit",
+                    "enable",
+                    "delete",
+                    "clone"
+                ],
+                "moreInfo": [
+                    {
+                        "field": "name",
+                        "label": "Input name"
+                    },
+                    {
+                        "field": "account",
+                        "label": "Account"
+                    },
+                    {
+                        "field": "interval",
+                        "label": "Collection interval"
+                    },
+                    {
+                        "field": "include",
+                        "label": "Included properties"
+                    },
+                    {
+                        "field": "exclude",
+                        "label": "Excluded properties"
+                    },
+                    {
+                        "field": "timefield",
+                        "label": "Time field of the table"
+                    },
+                    {
+                        "field": "since_when",
+                        "label": "Date started from"
+                    },
+                    {
+                        "field": "id_field",
+                        "label": "ID field"
+                    },
+                    {
+                        "field": "filter_data",
+                        "label": "Filter parameters"
+                    },
+                    {
+                        "field": "disabled",
+                        "label": "Status",
+                        "mapping": {
+                            "false": "Enabled",
+                            "true": "Disabled"
+                        }
+                    },
+                    {
+                        "field": "index",
+                        "label": "Index"
+                    }
+                ],
+                "header": [
+                    {
+                        "field": "name",
+                        "label": "Input name"
+                    },
+                    {
+                        "field": "account",
+                        "label": "Account",
+                        "customCell": {
+                            "src": "custom_input_cell.4.0.0",
+                            "type": "external"
+                        }
+                    },
+                    {
+                        "field": "interval",
+                        "label": "Collection interval"
+                    },
+                    {
+                        "field": "table",
+                        "label": "Table to collect data from"
+                    },
+                    {
+                        "field": "timefield",
+                        "label": "Time field of the table"
+                    },
+                    {
+                        "field": "since_when",
+                        "label": "Date started from"
+                    },
+                    {
+                        "field": "disabled",
+                        "label": "Status"
+                    }
+                ]
+            },
+            "title": "Inputs",
+            "services": [
+                {
+                    "hook": {
+                        "src": "input_hook.4.0.0",
+                        "type": "external"
+                    },
+                    "entity": [
+                        {
+                            "field": "name",
+                            "required": true,
+                            "options": {
+                                "placeholder": "Required"
+                            },
+                            "label": "Input name",
+                            "type": "text",
+                            "help": "Enter a unique name for the input.",
+                            "validators": [
+                                {
+                                    "errorMsg": "Input Name must begin with a letter and consist exclusively of alphanumeric characters and underscores.",
+                                    "type": "regex",
+                                    "pattern": "^[a-zA-Z]\\w*$"
+                                },
+                                {
+                                    "type": "string",
+                                    "maxLength": 150,
+                                    "minLength": 1,
+                                    "errorMsg": "Maximum length allowed for field Input Name is 150"
+                                }
+                            ]
+                        },
+                        {
+                            "type": "singleSelect",
+                            "label": "Account",
+                            "options": {
+                                "referenceName": "account"
+                            },
+                            "field": "account",
+                            "required": true
+                        },
+                        {
+                            "field": "interval",
+                            "label": "Collection interval",
+                            "type": "text",
+                            "help": "Collection interval for this input (in seconds).",
+                            "required": true,
+                            "defaultValue": 60,
+                            "validators": [
+                                {
+                                    "type": "number",
+                                    "range": [
+                                        1,
+                                        31536000
+                                    ]
+                                },
+                                {
+                                    "type": "regex",
+                                    "errorMsg": "Interval must be an integer.",
+                                    "pattern": "^\\d+$"
+                                }
+                            ]
+                        },
+                        {
+                            "field": "duration",
+                            "label": "Duration",
+                            "type": "text",
+                            "help": "Collection interval for this input (in seconds).",
+                            "required": false,
+                            "defaultValue": "Deprecated - Please use the interval field instead",
+                            "options": {
+                                "display": false
+                            }
+                        },
+                        {
+                            "field": "table",
+                            "label": "Table to collect data from",
+                            "type": "singleSelect",
+                            "help": "Select a ServiceNow table from the list or enter a new custom table in the search box.",
+                            "required": true,
+                            "options": {
+                                "createSearchChoice": true,
+                                "disableonEdit": true,
+                                "autoCompleteFields": [
+                                    {
+                                        "label": "incident",
+                                        "value": "incident"
+                                    },
+                                    {
+                                        "label": "problem",
+                                        "value": "problem"
+                                    },
+                                    {
+                                        "label": "em_event",
+                                        "value": "em_event"
+                                    },
+                                    {
+                                        "label": "sys_user_group",
+                                        "value": "sys_user_group"
+                                    },
+                                    {
+                                        "label": "sys_user",
+                                        "value": "sys_user"
+                                    },
+                                    {
+                                        "label": "change_task",
+                                        "value": "change_task"
+                                    },
+                                    {
+                                        "label": "change_request",
+                                        "value": "change_request"
+                                    },
+                                    {
+                                        "label": "cmn_location",
+                                        "value": "cmn_location"
+                                    },
+                                    {
+                                        "label": "cmdb",
+                                        "value": "cmdb"
+                                    },
+                                    {
+                                        "label": "cmdb_ci",
+                                        "value": "cmdb_ci"
+                                    },
+                                    {
+                                        "label": "cmdb_ci_server",
+                                        "value": "cmdb_ci_server"
+                                    },
+                                    {
+                                        "label": "cmdb_ci_vm",
+                                        "value": "cmdb_ci_vm"
+                                    },
+                                    {
+                                        "label": "cmdb_ci_infra_service",
+                                        "value": "cmdb_ci_infra_service"
+                                    },
+                                    {
+                                        "label": "cmdb_ci_db_instance",
+                                        "value": "cmdb_ci_db_instance"
+                                    },
+                                    {
+                                        "label": "cmdb_ci_app_server",
+                                        "value": "cmdb_ci_app_server"
+                                    },
+                                    {
+                                        "label": "cmdb_ci_service",
+                                        "value": "cmdb_ci_service"
+                                    },
+                                    {
+                                        "label": "cmdb_rel_ci",
+                                        "value": "cmdb_rel_ci"
+                                    },
+                                    {
+                                        "label": "sys_choice",
+                                        "value": "sys_choice"
+                                    },
+                                    {
+                                        "label": "sysevent",
+                                        "value": "sysevent"
+                                    },
+                                    {
+                                        "label": "syslog",
+                                        "value": "syslog"
+                                    },
+                                    {
+                                        "label": "syslog_transaction",
+                                        "value": "syslog_transaction"
+                                    },
+                                    {
+                                        "label": "sys_audit",
+                                        "value": "sys_audit"
+                                    },
+                                    {
+                                        "label": "sys_audit_delete",
+                                        "value": "sys_audit_delete"
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "type": "radio",
+                            "label": "Use existing data input?",
+                            "field": "reuse_checkpoint",
+                            "defaultValue": "yes",
+                            "help": "Select whether or not to reuse the checkpoint file already available for the named input.",
+                            "required": false,
+                            "options": {
+                                "items": [
+                                    {
+                                        "value": "yes",
+                                        "label": "Yes"
+                                    },
+                                    {
+                                        "value": "no",
+                                        "label": "No"
+                                    }
+                                ],
+                                "display": false
+                            }
+                        },
+                        {
+                            "field": "timefield",
+                            "label": "Time field of the table",
+                            "type": "text",
+                            "defaultValue": "sys_updated_on",
+                            "help": "Time field of the database table. Default is 'sys_updated_on'."
+                        },
+                        {
+                            "field": "since_when",
+                            "label": "Start date",
+                            "type": "text",
+                            "help": "Start date should be in 'YYYY-MM-DD hh:mm:ss'(UTC) format.(Default is one week ago.).",
+                            "tooltip": "Changing this parameter may result in gaps or duplication in data collection.",
+                            "validators": [
+                                {
+                                    "type": "regex",
+                                    "pattern": "^([0-9]{4})-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])\\s([01][0-9]|2[0-3]):([0-5][0-9]):([0-5][0-9])$",
+                                    "errorMsg": "Date should be valid and in mentioned format"
+                                }
+                            ]
+                        },
+                        {
+                            "field": "include",
+                            "label": "Included properties",
+                            "type": "text",
+                            "help": "Enter comma-separated properties of the database table to include. 'Time field of the table' and 'ID Field' will be included by default."
+                        },
+                        {
+                            "field": "exclude",
+                            "label": "Excluded properties",
+                            "type": "text",
+                            "help": "Enter comma-separated properties of the database table to exclude."
+                        },
+                        {
+                            "field": "id_field",
+                            "label": "ID field",
+                            "type": "text",
+                            "help": "Field which uniquely identifies each row in this table (Default is 'sys_id').",
+                            "required": false,
+                            "defaultValue": "sys_id"
+                        },
+                        {
+                            "field": "filter_data",
+                            "label": "Filter parameters",
+                            "type": "text",
+                            "help": "Provide filters as per ServiceNow syntax. For example: key1=value1^key2STARTSWITHvalue2^ORkey3=value3. For more details refer to TA docs."
+                        },
+                        {
+                            "type": "singleSelect",
+                            "label": "Index",
+                            "defaultValue": "default",
+                            "required": true,
+                            "validators": [
+                                {
+                                    "type": "string",
+                                    "maxLength": 80,
+                                    "errorMsg": "Maximum length allowed for index is 80",
+                                    "minLength": 1
+                                },
+                                {
+                                    "type": "regex",
+                                    "errorMsg": "Index names must begin with a letter or a number and must contain only letters, numbers, underscores, or hyphens.",
+                                    "pattern": "^[a-zA-Z0-9][a-zA-Z0-9\\_\\-]*$"
+                                }
+                            ],
+                            "field": "index",
+                            "options": {
+                                "createSearchChoice": true,
+                                "denyList": "^_.*$",
+                                "endpointUrl": "data/indexes"
+                            }
+                        }
+                    ],
+                    "title": "Inputs",
+                    "name": "snow"
+                }
+            ]
+        }
+    },
+    "meta": {
+        "displayName": "Splunk Add-on for ServiceNow",
+        "version": "7.6.0",
+        "restRoot": "splunk_ta_snow",
+        "name": "Splunk_TA_snow",
+        "schemaVersion": "0.0.3"
+    },
+    "alerts": [
+        {
+            "name": "snow_event",
+            "label": "ServiceNow Event Integration",
+            "description": "Create ServiceNow event based on the search result",
+            "entity": [
+                {
+                    "type": "singleSelectSplunkSearch",
+                    "label": "Select Account",
+                    "field": "account",
+                    "search": "| rest servicesNS/nobody/Splunk_TA_snow/admin/splunk_ta_snow_account splunk_server=local | dedup title",
+                    "valueField": "title",
+                    "labelField": "title",
+                    "help": "Select the ServiceNow Account",
+                    "required": true
+                },
+                {
+                    "type": "text",
+                    "label": "Node",
+                    "field": "node",
+                    "required": true,
+                    "help": "The physical or virtual device on which the event occurred"
+                },
+                {
+                    "type": "text",
+                    "label": "Type",
+                    "field": "type",
+                    "required": true,
+                    "help": "Event type, as defined in ServiceNow Event Management"
+                },
+                {
+                    "type": "text",
+                    "label": "Resource",
+                    "field": "resource",
+                    "required": true,
+                    "help": "The component on the node to which the event applies"
+                },
+                {
+                    "type": "text",
+                    "label": "Severity",
+                    "field": "severity",
+                    "required": true,
+                    "help": "Numerical value for the severity of the event"
+                },
+                {
+                    "type": "text",
+                    "label": "Description",
+                    "field": "description",
+                    "required": false
+                }
+            ]
+        },
+        {
+            "name": "snow_incident",
+            "label": "ServiceNow Incident Integration",
+            "description": "Create ServiceNow incident based on the search result",
+            "entity": [
+                {
+                    "type": "singleSelectSplunkSearch",
+                    "label": "Select Account",
+                    "field": "account",
+                    "search": "| rest servicesNS/nobody/Splunk_TA_snow/admin/splunk_ta_snow_account splunk_server=local | dedup title",
+                    "valueField": "title",
+                    "labelField": "title",
+                    "help": "Select the ServiceNow Account",
+                    "required": true
+                },
+                {
+                    "type": "text",
+                    "label": "State",
+                    "field": "state",
+                    "required": false
+                },
+                {
+                    "type": "text",
+                    "label": "Scripted Endpoint",
+                    "field": "scripted_endpoint",
+                    "help": "Scripted REST endpoint to create incident at. Format: /api/<API namespace>/<API ID>/<Relative path>. Default: /api/now/incident",
+                    "required": false
+                },
+                {
+                    "type": "text",
+                    "label": "Configuration Item",
+                    "field": "configuration_item",
+                    "required": false,
+                    "help": "Configuration item ID or name"
+                },
+                {
+                    "type": "text",
+                    "label": "Contact Type",
+                    "field": "contact_type",
+                    "required": true
+                },
+                {
+                    "type": "text",
+                    "label": "Assignment Group",
+                    "field": "assignment_group",
+                    "required": false,
+                    "help": "Incident assignment group ID or name"
+                },
+                {
+                    "type": "text",
+                    "label": "Category",
+                    "field": "category",
+                    "required": true
+                },
+                {
+                    "type": "text",
+                    "label": "Subcategory",
+                    "field": "subcategory",
+                    "required": false
+                },
+                {
+                    "type": "text",
+                    "label": "Short Description",
+                    "field": "short_description",
+                    "required": true
+                },
+                {
+                    "type": "text",
+                    "label": "Correlation ID",
+                    "field": "correlation_id",
+                    "required": false
+                }
+            ]
+        }
+    ]
+}

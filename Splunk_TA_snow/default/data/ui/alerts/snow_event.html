@@ -1,0 +1,115 @@
+<form class="form-horizontal form-complex">
+    <div class="control-group">
+        <label class="control-label" for="snow_event_account">Enter ServiceNow Account(s) <span
+                class="required">*</span> </label>
+
+        <div class="controls">
+            <input type="text" name="action.snow_event.param.account" id="snow_event_account" />
+            <span class="help-block" style="display: block; position: static; width: auto; margin-left: 0;">
+                Enter comma-delimited account(s)
+                <a class="external" href="/app/Splunk_TA_snow/configuration" target="_blank" rel="noopener noreferrer">
+                    Configure a new account
+                </a>
+                Reopen this pop-up after creating a new account
+            </span>
+        </div>
+    </div>
+    <div class="control-group">
+        <label class="control-label" for="snow_event_node">Node <span class="required">*</span> </label>
+        <div class="controls">
+            <input type="text" name="action.snow_event.param.node" id="snow_event_node" />
+        </div>
+    </div>
+    <div class="control-group">
+        <div class="controls">
+            <span class="help-block" style="display: block; position: static; width: auto; margin-left: 0;">
+                The physical or virtual device on which the event occurred
+            </span>
+        </div>
+    </div>
+    <div class="control-group">
+        <label class="control-label" for="snow_event_type">Type <span class="required">*</span> </label>
+        <div class="controls">
+            <input type="text" name="action.snow_event.param.type" id="snow_event_type" />
+        </div>
+    </div>
+    <div class="control-group">
+        <div class="controls">
+            <span class="help-block" style="display: block; position: static; width: auto; margin-left: 0;">
+                Event type, as defined in ServiceNow Event Management
+            </span>
+        </div>
+    </div>
+    <div class="control-group">
+        <label class="control-label" for="snow_event_resource">Resource <span class="required">*</span> </label>
+        <div class="controls">
+            <input type="text" name="action.snow_event.param.resource" id="snow_event_resource" />
+        </div>
+    </div>
+    <div class="control-group">
+        <div class="controls">
+            <span class="help-block" style="display: block; position: static; width: auto; margin-left: 0;">
+                The component on the node to which the event applies
+            </span>
+        </div>
+    </div>
+    <div class="control-group">
+        <label class="control-label" for="snow_event_severity">Severity <span class="required">*</span> </label>
+        <div class="controls">
+            <input type="text" name="action.snow_event.param.severity" id="snow_event_severity" />
+        </div>
+    </div>
+    <div class="control-group">
+        <div class="controls">
+            <span class="help-block" style="display: block; position: static; width: auto; margin-left: 0;">
+                Numerical value for the severity of the event
+            </span>
+        </div>
+    </div>
+    <div class="control-group">
+        <label class="control-label" for="snow_event_additional_info">Additional Info </label>
+        <div class="controls">
+            <input type="text" name="action.snow_event.param.additional_info" id="snow_event_additional_info" />
+        </div>
+    </div>
+    <div class="control-group">
+        <div class="controls">
+            <span class="help-block" style="display: block; position: static; width: auto; margin-left: 0;">
+                Pass double pipe sign delimited values e.g. key1=value one||key2= value 2</span>
+        </div>
+    </div>
+    <div class="control-group">
+        <label class="control-label" for="snow_event_ci_identifier">CI identifier </label>
+        <div class="controls">
+            <input type="text" name="action.snow_event.param.ci_identifier" id="snow_event_ci_identifier" />
+        </div>
+    </div>
+    <div class="control-group">
+        <div class="controls">
+            <span class="help-block" style="display: block; position: static; width: auto; margin-left: 0;">
+                Pass double pipe sign delimited values. It will be converted to quoted JSON string.
+                e.g. key1=value1||key2=value2</span>
+        </div>
+    </div>
+    <div class="control-group">
+        <label class="control-label" for="snow_event_description">Description </label>
+        <div class="controls">
+            <textarea type="text" name="action.snow_event.param.description" style="height:120px;"
+                id="snow_event_description">
+        </textarea>
+        </div>
+    </div>
+    <div class="control-group">
+        <label class="control-label" for="snow_event_custom_fields">Custom Fields </label>
+        <div class="controls">
+            <textarea rows="3" name="action.snow_event.param.custom_fields" id="snow_event_custom_fields"></textarea>
+        </div>
+    </div>
+    <div class="control-group">
+        <div class="controls">
+            <span class="help-block" style="display: block; position: static; width: auto; margin-left: 0;">
+                Pass double pipe sign delimited values e.g. comments=Can't read
+                email||description=User is not able to access email</span>
+        </div>
+    </div>
+</form>

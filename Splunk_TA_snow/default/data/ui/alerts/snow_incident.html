@@ -1,0 +1,166 @@
+<form class="form-horizontal form-complex">
+    <div class="control-group">
+        <label class="control-label" for="snow_incident_account">Select Account <span class="required">*</span> </label>
+        <div class="controls">
+            <splunk-search-dropdown name="action.snow_incident.param.account" id="snow_incident_account"
+                label-field="title" value-field="title"
+                search="| rest servicesNS/nobody/Splunk_TA_snow/admin/splunk_ta_snow_account splunk_server=local | dedup title"
+                earliest="-60m"
+                latest="now" />
+        </div>
+    </div>
+    <div class="control-group">
+        <div class="controls">
+            <span class="help-block" style="display: block; position: static; width: auto; margin-left: 0;">
+                <a class="external" href="/app/Splunk_TA_snow/configuration" target="_blank" rel="noopener noreferrer">
+                    Configure a new account
+                </a>
+                Reopen this pop-up after creating a new account
+            </span>
+        </div>
+    </div>
+    <div class="control-group">
+        <label class="control-label" title="Configure this field for writing to a scripted REST endpoint." for="snow_incident_scripted_endpoint">Endpoint </label>
+        <div class="controls">
+            <input type="text" name="action.snow_incident.param.scripted_endpoint" id="snow_incident_scripted_endpoint" />
+        </div>
+    </div>
+    <div class="control-group">
+        <div class="controls">
+            <span class="help-block" style="display: block; position: static; width: auto; margin-left: 0;">
+                Scripted REST endpoint to create incident at. &#013;Format: /api/&lt;API namespace&gt;/&lt;API ID&gt;/&lt;Relative path&gt;. &#013;Default: /api/now/table/x_splu2_splunk_ser_u_splunk_incident
+            </span>
+        </div>
+    </div>
+    <div class="control-group">
+        <label class="control-label" for="snow_incident_state">State </label>
+        <div class="controls">
+            <input type="text" name="action.snow_incident.param.state" id="snow_incident_state" />
+        </div>
+    </div>
+    <div class="control-group">
+        <label class="control-label" for="snow_incident_configuration_item">Configuration Item </label>
+        <div class="controls">
+            <input type="text" name="action.snow_incident.param.configuration_item"
+                id="snow_incident_configuration_item" />
+        </div>
+    </div>
+    <div class="control-group">
+        <div class="controls">
+            <span class="help-block" style="display: block; position: static; width: auto; margin-left: 0;">
+                Configuration item ID or name
+            </span>
+        </div>
+    </div>
+    <div class="control-group">
+        <label class="control-label" for="snow_incident_contact_type">Contact Type </label>
+        <div class="controls">
+            <input type="text" name="action.snow_incident.param.contact_type" id="snow_incident_contact_type" />
+        </div>
+    </div>
+    <div class="control-group">
+        <label class="control-label" for="snow_incident_assignment_group">Assignment Group </label>
+        <div class="controls">
+            <input type="text" name="action.snow_incident.param.assignment_group" id="snow_incident_assignment_group" />
+        </div>
+    </div>
+    <div class="control-group">
+        <div class="controls">
+            <span class="help-block" style="display: block; position: static; width: auto; margin-left: 0;">
+                Incident assignment group ID or name
+            </span>
+        </div>
+    </div>
+    <div class="control-group">
+        <label class="control-label" for="snow_incident_category">Category </label>
+        <div class="controls">
+            <input type="text" name="action.snow_incident.param.category" id="snow_incident_category" />
+        </div>
+    </div>
+    <div class="control-group">
+        <label class="control-label" for="snow_incident_subcategory">Subcategory </label>
+        <div class="controls">
+            <input type="text" name="action.snow_incident.param.subcategory" id="snow_incident_subcategory" />
+        </div>
+    </div>
+    <div class="control-group">
+        <label class="control-label" for="snow_incident_impact">Impact </label>
+        <div class="controls">
+            <input type="text" name="action.snow_incident.param.impact" id="snow_incident_impact" />
+        </div>
+    </div>
+    <div class="control-group">
+        <div class="controls">
+            <span class="help-block" style="display: block; position: static; width: auto; margin-left: 0;">
+                Numerical value for the impact.
+            </span>
+        </div>
+    </div>
+    <div class="control-group">
+        <label class="control-label" for="snow_incident_urgency">Urgency </label>
+        <div class="controls">
+            <input type="text" name="action.snow_incident.param.urgency" id="snow_incident_urgency" />
+        </div>
+    </div>
+    <div class="control-group">
+        <div class="controls">
+            <span class="help-block" style="display: block; position: static; width: auto; margin-left: 0;">
+                Numerical value for the urgency.
+            </span>
+        </div>
+    </div>
+    <div class="control-group">
+        <label class="control-label" for="snow_incident_priority">Priority </label>
+        <div class="controls">
+            <input type="text" name="action.snow_incident.param.priority" id="snow_incident_priority" />
+        </div>
+    </div>
+    <div class="control-group">
+        <div class="controls">
+            <span class="help-block" style="display: block; position: static; width: auto; margin-left: 0;">
+                Numerical value for the priority.
+            </span>
+        </div>
+    </div>
+    <div class="control-group">
+        <label class="control-label" for="snow_incident_short_description">Short Description </label>
+        <div class="controls">
+            <input type="text" name="action.snow_incident.param.short_description"
+                id="snow_incident_short_description" />
+        </div>
+    </div>
+    <div class="control-group">
+        <label class="control-label" for="snow_incident_splunk_url">Splunk URL </label>
+        <div class="controls">
+            <input type="text" name="action.snow_incident.param.splunk_url" id="snow_incident_splunk_url" />
+        </div>
+    </div>
+    <div class="control-group">
+        <label class="control-label" for="snow_incident_custom_fields">Custom Fields </label>
+        <div class="controls">
+            <textarea rows="3" name="action.snow_incident.param.custom_fields"
+                id="snow_incident_custom_fields"></textarea>
+        </div>
+    </div>
+    <div class="control-group">
+        <div class="controls">
+            <span class="help-block" style="display: block; position: static; width: auto; margin-left: 0;">
+                Pass double pipe sign delimited values e.g. comments=Can't read
+                email||description=User is not able to access email</span>
+        </div>
+    </div>
+    <div class="control-group">
+        <label class="control-label" for="snow_incident_correlation_id">Correlation ID </label>
+        <div class="controls">
+            <input type="text" name="action.snow_incident.param.correlation_id" id="snow_incident_correlation_id" />
+        </div>
+    </div>
+    <div class="control-group">
+        <div class="controls">
+            <span class="help-block" style="display: block; position: static; width: auto; margin-left: 0;">
+                <a class="external"
+                    href="http://docs.splunk.com/Documentation/AddOns/latest/ServiceNow/Usecustomalertactions"
+                    target="_blank" rel="noopener noreferrer">Learn more</a></span>
+        </div>
+    </div>
+</form>
